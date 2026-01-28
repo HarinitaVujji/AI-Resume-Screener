@@ -25,7 +25,9 @@ if resume_type == "CSV File":
         st.subheader("Select Resume Text Column")
         column_name = st.selectbox("Choose the column that contains resume text:", df.columns)
 
-        resumes = df[column_name].astype(str).tolist()
+        text_columns = df.select_dtypes(include="object").columns
+        resumes = df[text_columns].fillna("").agg(" ".join, axis=1).tolist()
+
         st.success(f"{len(resumes)} resumes loaded from column: {column_name}")
 
 
